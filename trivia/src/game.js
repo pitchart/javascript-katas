@@ -5,9 +5,6 @@ const Category = {
     ROCK: 'Rock'
 }
 
-
-
-
 class Game {
     players = new Array();
     places = new Array(6);
@@ -18,6 +15,7 @@ class Game {
     scienceQuestions = new Array();
     sportsQuestions = new Array();
     rockQuestions = new Array();
+    questions = new Map();
 
     currentPlayer = 0;
     isGettingOutOfPenaltyBox = false;
@@ -29,6 +27,12 @@ class Game {
             this.sportsQuestions.push("Sports Question " + i);
             this.rockQuestions.push(this.createRockQuestion(i));
         }
+ 
+        this.questions.set(Category.POP, this.popQuestions);
+        this.questions.set(Category.SCIENCE, this.scienceQuestions);
+        this.questions.set(Category.ROCK, this.rockQuestions);
+        this.questions.set(Category.SPORTS, this.sportsQuestions);
+
     }
 
     moveCurrentPlayer(die) {
@@ -82,14 +86,7 @@ class Game {
     };
 
     askQuestion = function () {
-        if (this.currentCategory() == Category.POP)
-            console.log(this.popQuestions.shift());
-        if (this.currentCategory() == Category.SCIENCE)
-            console.log(this.scienceQuestions.shift());
-        if (this.currentCategory() == Category.SPORTS)
-            console.log(this.sportsQuestions.shift());
-        if (this.currentCategory() == Category.ROCK)
-            console.log(this.rockQuestions.shift());
+        console.log(this.questions.get(this.currentCategory()).shift());
     };
 
 

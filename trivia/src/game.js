@@ -6,7 +6,7 @@ const Category = {
 }
 
 class Game {
-    players = new Array();
+    players = [];
     places = new Array(6);
     purses = new Array(6);
     inPenaltyBox = new Array(6);
@@ -17,10 +17,11 @@ class Game {
     isGettingOutOfPenaltyBox = false;
 
     constructor() {
-        for (let category in [Category.POP, Category.ROCK, Category.SCIENCE, Category.SPORTS]) {
-            this.questions.set(category, new Array());
+        for (let category in Category) {
+            let categoryElement = Category[category];
+            this.questions.set(categoryElement, []);
             for (let i = 0; i < 50; i++) {
-                this.questions.get(category).push(`${category} Question ${i}`);
+                this.questions.get(categoryElement).push(`${categoryElement} Question ${i}`);
             }
         }
     }
@@ -40,10 +41,14 @@ class Game {
 
     currentCategory = function () {
         switch (this.places[this.currentPlayer] % 4) {
-            case 0: return Category.POP;
-            case 1: return Category.SCIENCE;
-            case 2: return Category.SPORTS;
-            default: return Category.ROCK;
+            case 0:
+                return Category.POP;
+            case 1:
+                return Category.SCIENCE;
+            case 2:
+                return Category.SPORTS;
+            default:
+                return Category.ROCK;
         }
     };
 
@@ -80,7 +85,7 @@ class Game {
         console.log(this.players[this.currentPlayer] + " is the current player");
         console.log("They have rolled a " + die);
 
-        if (this.inPenaltyBox[this.currentPlayer] && ! this.isOdd(die)) {
+        if (this.inPenaltyBox[this.currentPlayer] && !this.isOdd(die)) {
             console.log(this.players[this.currentPlayer] + " is not getting out of the penalty box");
             this.isGettingOutOfPenaltyBox = false;
             return;
@@ -98,53 +103,38 @@ class Game {
     };
 
     wasCorrectlyAnswered = function () {
-        if (this.inPenaltyBox[this.currentPlayer]) {
-            if (this.isGettingOutOfPenaltyBox) {
-                console.log('Answer was correct!!!!');
-                this.purses[this.currentPlayer] += 1;
-                console.log(this.players[this.currentPlayer] + " now has " +
-                    this.purses[this.currentPlayer] + " Gold Coins.");
-
-                var winner = didPlayerWin();
-                this.currentPlayer += 1;
-                if (this.currentPlayer == this.players.length)
-                    this.currentPlayer = 0;
-
-                return winner;
-            } else {
-                this.currentPlayer += 1;
-                if (this.currentPlayer == this.players.length)
-                    this.currentPlayer = 0;
-                return true;
-            }
-
-
-        } else {
-
-            console.log("Answer was correct!!!!");
-
-            this.purses[this.currentPlayer] += 1;
-            console.log(this.players[this.currentPlayer] + " now has " +
-                this.purses[this.currentPlayer] + " Gold Coins.");
-
-            var winner = this.didPlayerWin();
-
-            this.currentPlayer += 1;
-            if (this.currentPlayer == this.players.length)
-                this.currentPlayer = 0;
-
-            return winner;
+        let winner = false;
+        if (this.playerIsNotPenalized()) {
+            console.log('Answer was correct!!!!');
+            this.addCoins();
+            winner = this.didPlayerWin();
         }
+        this.nextPlayer();
+        return winner;
     };
+
+    playerIsNotPenalized() {
+        return !this.inPenaltyBox[this.currentPlayer] || this.isGettingOutOfPenaltyBox;
+    }
+
+    addCoins() {
+        this.purses[this.currentPlayer] += 1;
+        console.log(this.players[this.currentPlayer] + " now has " +
+            this.purses[this.currentPlayer] + " Gold Coins.");
+    }
+
+    nextPlayer() {
+        this.currentPlayer += 1;
+        if (this.currentPlayer == this.players.length)
+            this.currentPlayer = 0;
+    }
 
     wrongAnswer = function () {
         console.log('Question was incorrectly answered');
         console.log(this.players[this.currentPlayer] + " was sent to the penalty box");
         this.inPenaltyBox[this.currentPlayer] = true;
 
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length)
-            this.currentPlayer = 0;
+        this.nextPlayer();
         return true;
     };
 

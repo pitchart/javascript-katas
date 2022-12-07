@@ -13,7 +13,7 @@ class Game {
     isGettingOutOfPenaltyBox = false;
 
     constructor() {
-        for (var i = 0; i < 50; i++) {
+        for (let i = 0; i < 50; i++) {
             this.popQuestions.push("Pop Question " + i);
             this.scienceQuestions.push("Science Question " + i);
             this.sportsQuestions.push("Sports Question " + i);
@@ -115,13 +115,7 @@ class Game {
                 this.isGettingOutOfPenaltyBox = false;
             }
         } else {
-
-            this.places[this.currentPlayer] = this.places[this.currentPlayer] + die;
-            if (this.places[this.currentPlayer] > 11) {
-                this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
-            }
-
-            console.log(this.players[this.currentPlayer] + "'s new location is " + this.places[this.currentPlayer]);
+            this.moveCurrentPlayer(die);
             console.log("The category is " + this.currentCategory());
             this.askQuestion();
         }

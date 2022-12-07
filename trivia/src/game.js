@@ -1,3 +1,13 @@
+const Category = {
+    SCIENCE: 'Science',
+    SPORTS: 'Sports',
+    POP: 'Pop',
+    ROCK: 'Rock'
+}
+
+
+
+
 class Game {
     players = new Array();
     places = new Array(6);
@@ -35,25 +45,12 @@ class Game {
     }
 
     currentCategory = function () {
-        if (this.places[this.currentPlayer] == 0)
-            return 'Pop';
-        if (this.places[this.currentPlayer] == 4)
-            return 'Pop';
-        if (this.places[this.currentPlayer] == 8)
-            return 'Pop';
-        if (this.places[this.currentPlayer] == 1)
-            return 'Science';
-        if (this.places[this.currentPlayer] == 5)
-            return 'Science';
-        if (this.places[this.currentPlayer] == 9)
-            return 'Science';
-        if (this.places[this.currentPlayer] == 2)
-            return 'Sports';
-        if (this.places[this.currentPlayer] == 6)
-            return 'Sports';
-        if (this.places[this.currentPlayer] == 10)
-            return 'Sports';
-        return 'Rock';
+        switch (this.places[this.currentPlayer] % 4) {
+            case 0: return Category.POP;
+            case 1: return Category.SCIENCE;
+            case 2: return Category.SPORTS;
+            default: return Category.ROCK;
+        }
     };
 
     isPlayable = function (howManyPlayers) {
@@ -85,13 +82,13 @@ class Game {
     };
 
     askQuestion = function () {
-        if (this.currentCategory() == 'Pop')
+        if (this.currentCategory() == Category.POP)
             console.log(this.popQuestions.shift());
-        if (this.currentCategory() == 'Science')
+        if (this.currentCategory() == Category.SCIENCE)
             console.log(this.scienceQuestions.shift());
-        if (this.currentCategory() == 'Sports')
+        if (this.currentCategory() == Category.SPORTS)
             console.log(this.sportsQuestions.shift());
-        if (this.currentCategory() == 'Rock')
+        if (this.currentCategory() == Category.ROCK)
             console.log(this.rockQuestions.shift());
     };
 

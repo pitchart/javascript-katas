@@ -12,7 +12,8 @@ class GameRunner {
 
             do {
 
-                game.roll(Math.floor(Math.random() * 6) + 1);
+                const dieValue = Math.floor(Math.random() * 6) + 1;
+                game.roll(dieValue);
 
                 if (Math.floor(Math.random() * 10) == 7) {
                     notAWinner = game.wrongAnswer();

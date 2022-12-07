@@ -100,25 +100,21 @@ class Game {
         console.log(this.players[this.currentPlayer] + " is the current player");
         console.log("They have rolled a " + die);
 
-        if (this.inPenaltyBox[this.currentPlayer]) {
-            if (this.isOdd(die)) {
-                this.isGettingOutOfPenaltyBox = true;
-
-                console.log(this.players[this.currentPlayer] + " is getting out of the penalty box");
-
-                this.moveCurrentPlayer(die);
-
-                console.log("The category is " + this.currentCategory());
-                this.askQuestion();
-            } else {
-                console.log(this.players[this.currentPlayer] + " is not getting out of the penalty box");
-                this.isGettingOutOfPenaltyBox = false;
-            }
-        } else {
-            this.moveCurrentPlayer(die);
-            console.log("The category is " + this.currentCategory());
-            this.askQuestion();
+        if (this.inPenaltyBox[this.currentPlayer] && ! this.isOdd(die)) {
+            console.log(this.players[this.currentPlayer] + " is not getting out of the penalty box");
+            this.isGettingOutOfPenaltyBox = false;
+            return;
         }
+
+        if (this.inPenaltyBox[this.currentPlayer] && this.isOdd(die)) {
+            this.isGettingOutOfPenaltyBox = true;
+            console.log(this.players[this.currentPlayer] + " is getting out of the penalty box");
+        }
+
+        this.moveCurrentPlayer(die);
+        console.log("The category is " + this.currentCategory());
+        this.askQuestion();
+
     };
 
     wasCorrectlyAnswered = function () {

@@ -11,28 +11,18 @@ class Game {
     purses = new Array(6);
     inPenaltyBox = new Array(6);
 
-    popQuestions = new Array();
-    scienceQuestions = new Array();
-    sportsQuestions = new Array();
-    rockQuestions = new Array();
     questions = new Map();
 
     currentPlayer = 0;
     isGettingOutOfPenaltyBox = false;
 
     constructor() {
-        for (let i = 0; i < 50; i++) {
-            this.popQuestions.push("Pop Question " + i);
-            this.scienceQuestions.push("Science Question " + i);
-            this.sportsQuestions.push("Sports Question " + i);
-            this.rockQuestions.push(this.createRockQuestion(i));
+        for (let category in [Category.POP, Category.ROCK, Category.SCIENCE, Category.SPORTS]) {
+            this.questions.set(category, new Array());
+            for (let i = 0; i < 50; i++) {
+                this.questions.get(category).push(`${category} Question ${i}`);
+            }
         }
- 
-        this.questions.set(Category.POP, this.popQuestions);
-        this.questions.set(Category.SCIENCE, this.scienceQuestions);
-        this.questions.set(Category.ROCK, this.rockQuestions);
-        this.questions.set(Category.SPORTS, this.sportsQuestions);
-
     }
 
     moveCurrentPlayer(die) {
@@ -59,10 +49,6 @@ class Game {
 
     isPlayable = function (howManyPlayers) {
         return howManyPlayers >= 2;
-    };
-
-    createRockQuestion = function (index) {
-        return "Rock Question " + index;
     };
 
     didPlayerWin = function () {

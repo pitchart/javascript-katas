@@ -1,20 +1,5 @@
-class Player {
+const Player = require('../src/player');
 
-    #name = '';
-    #place = 0;
-    #purse = 0;
-    #isInPenaltyBox = false;
-
-    constructor(name) {
-        this.#name = name;
-    }
-
-    getName = () => this.#name;
-    getPlace = () => this.#place;
-    getPurse = () => this.#purse;
-    isInPenaltyBox = () => this.#isInPenaltyBox;
-
-}
 
 describe("Player", () => {
     it("should be initialized", () => {
@@ -24,5 +9,12 @@ describe("Player", () => {
         expect(player.getPlace()).toBe(0);
         expect(player.getPurse()).toBe(0);
         expect(player.isInPenaltyBox()).toBe(false);
+    });
+
+    it("should moved to a new place", () => {
+        const player = new Player('Player One')
+        player.moveTo(7);
+
+        expect(player.getPlace()).toBe(7);
     });
 });

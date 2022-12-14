@@ -1,3 +1,4 @@
+const Player = require('./player');
 const Category = {
     SCIENCE: 'Science',
     SPORTS: 'Sports',
@@ -6,8 +7,7 @@ const Category = {
 }
 
 class Game {
-    players = [];
-    places = new Array(6);
+    players = new Array();
     purses = new Array(6);
     inPenaltyBox = new Array(6);
 
@@ -15,6 +15,8 @@ class Game {
 
     currentPlayer = 0;
     isGettingOutOfPenaltyBox = false;
+
+
 
     constructor() {
         for (let category in Category) {
@@ -26,21 +28,21 @@ class Game {
         }
     }
 
+    boardSize = 12;
+
     moveCurrentPlayer(die) {
 
-        this.places[this.currentPlayer] = this.places[this.currentPlayer] + die;
-        if (this.places[this.currentPlayer] > 11) {
-            this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
-        }
-        console.log(this.players[this.currentPlayer] + "'s new location is " + this.places[this.currentPlayer]);
+        this.players[this.currentPlayer].moveTo((this.players[this.currentPlayer].getPlace() + die) % this.boardSize);
+        console.log(this.players[this.currentPlayer].getName()+ "'s new location is " + this.players[this.currentPlayer].getPlace());
     }
+
 
     isOdd(die) {
         return die % 2 != 0;
     }
 
     currentCategory = function () {
-        switch (this.places[this.currentPlayer] % 4) {
+        switch (this.players[this.currentPlayer].getPlace() % 4) {
             case 0:
                 return Category.POP;
             case 1:
@@ -60,13 +62,14 @@ class Game {
         return !(this.purses[this.currentPlayer] == 6);
     };
 
+
     add = function (playerName) {
-        this.players.push(playerName);
-        this.places[this.howManyPlayers() - 1] = 0;
+        const player = new Player(playerName);
+        this.players.push(player);
         this.purses[this.howManyPlayers() - 1] = 0;
         this.inPenaltyBox[this.howManyPlayers() - 1] = false;
 
-        console.log(playerName + " was added");
+        console.log(player.getName() + " was added");
         console.log("They are player number " + this.players.length);
 
         return true;
@@ -82,18 +85,18 @@ class Game {
 
 
     roll = function (die) {
-        console.log(this.players[this.currentPlayer] + " is the current player");
+        console.log(this.players[this.currentPlayer].getName()+ " is the current player");
         console.log("They have rolled a " + die);
 
         if (this.inPenaltyBox[this.currentPlayer] && !this.isOdd(die)) {
-            console.log(this.players[this.currentPlayer] + " is not getting out of the penalty box");
+            console.log(this.players[this.currentPlayer].getName()+ " is not getting out of the penalty box");
             this.isGettingOutOfPenaltyBox = false;
             return;
         }
 
         if (this.inPenaltyBox[this.currentPlayer] && this.isOdd(die)) {
             this.isGettingOutOfPenaltyBox = true;
-            console.log(this.players[this.currentPlayer] + " is getting out of the penalty box");
+            console.log(this.players[this.currentPlayer].getName()+ " is getting out of the penalty box");
         }
 
         this.moveCurrentPlayer(die);
@@ -119,7 +122,7 @@ class Game {
 
     addCoins() {
         this.purses[this.currentPlayer] += 1;
-        console.log(this.players[this.currentPlayer] + " now has " +
+        console.log(this.players[this.currentPlayer].getName()+ " now has " +
             this.purses[this.currentPlayer] + " Gold Coins.");
     }
 
@@ -131,7 +134,7 @@ class Game {
 
     wrongAnswer = function () {
         console.log('Question was incorrectly answered');
-        console.log(this.players[this.currentPlayer] + " was sent to the penalty box");
+        console.log(this.players[this.currentPlayer].getName()+ " was sent to the penalty box");
         this.inPenaltyBox[this.currentPlayer] = true;
 
         this.nextPlayer();

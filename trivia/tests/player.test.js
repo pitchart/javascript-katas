@@ -17,4 +17,26 @@ describe("Player", () => {
 
         expect(player.getPlace()).toBe(7);
     });
+
+    it("should add a coin to the purse", () => {
+        const player = new Player('Player One')
+        player.addCoin();
+
+        expect(player.getPurse()).toBe(1);
+    });
+
+    it("shoud go to penalty box", () => {
+        const player = new Player('Player One')
+        player.goToPenaltyBox();
+
+        expect(player.isInPenaltyBox()).toBe(true);
+    });
+
+    it("should leave penalty box", () => {
+        const player = new Player('Player One')
+        player.goToPenaltyBox();
+        player.leavePenaltyBox();
+
+        expect(player.isInPenaltyBox()).toBe(false);
+    });
 });

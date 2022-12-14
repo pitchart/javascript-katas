@@ -1,14 +1,11 @@
 const Game = require('./game');
+const Player =  require('./player');
 
 class GameRunner {
     constructor() {
         this.play = function () {
             var notAWinner = false;
-            let game = new Game();
-
-            game.add('Chet');
-            game.add('Pat');
-            game.add('Sue');
+            let game = new Game(new Player('Chet'), new Player('Pat'), new Player('Sue'));
 
             do {
 

@@ -13,6 +13,15 @@ class Player {
     getPlace = () => this.#place;
     getPurse = () => this.#purse;
     isInPenaltyBox = () => this.#isInPenaltyBox;
+    addCoin() {
+        this.#purse++;
+    }
+    goToPenaltyBox() {
+        this.#isInPenaltyBox = true;
+    }
+    leavePenaltyBox() {
+        this.#isInPenaltyBox = false;
+    }
 
     moveTo(place) {
         this.#place=place;

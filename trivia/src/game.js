@@ -1,4 +1,9 @@
-const Player = require('./player');
+// TODO 1: Remove isGettingOutOfPenaltyBox from Game class
+// TODO 2: Create value object Roll (with die and isOdd methods?)
+// TODO 3: Refactor "roll" method in Game class
+// TODO 4: See how the game is finished
+// TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
+
 const Category = {
     SCIENCE: 'Science',
     SPORTS: 'Sports',
@@ -8,8 +13,6 @@ const Category = {
 
 class Game {
     players = new Array();
-    purses = new Array(6);
-    inPenaltyBox = new Array(6);
 
     questions = new Map();
 
@@ -18,7 +21,11 @@ class Game {
 
 
 
-    constructor() {
+    constructor(...players) {
+        if (!this.isPlayable(players.length)) {
+            throw new Error("Not enough players to play");
+        }
+        players.forEach(player => this.add(player));
         for (let category in Category) {
             let categoryElement = Category[category];
             this.questions.set(categoryElement, []);
@@ -59,15 +66,12 @@ class Game {
     };
 
     didPlayerWin = function () {
-        return !(this.purses[this.currentPlayer] == 6);
+        return !(this.players[this.currentPlayer].getPurse() == 6);
     };
 
 
-    add = function (playerName) {
-        const player = new Player(playerName);
+    add = function (player) {
         this.players.push(player);
-        this.purses[this.howManyPlayers() - 1] = 0;
-        this.inPenaltyBox[this.howManyPlayers() - 1] = false;
 
         console.log(player.getName() + " was added");
         console.log("They are player number " + this.players.length);
@@ -88,13 +92,13 @@ class Game {
         console.log(this.players[this.currentPlayer].getName()+ " is the current player");
         console.log("They have rolled a " + die);
 
-        if (this.inPenaltyBox[this.currentPlayer] && !this.isOdd(die)) {
+        if (this.players[this.currentPlayer].isInPenaltyBox() && !this.isOdd(die)) {
             console.log(this.players[this.currentPlayer].getName()+ " is not getting out of the penalty box");
             this.isGettingOutOfPenaltyBox = false;
             return;
         }
 
-        if (this.inPenaltyBox[this.currentPlayer] && this.isOdd(die)) {
+        if (this.players[this.currentPlayer].isInPenaltyBox() && this.isOdd(die)) {
             this.isGettingOutOfPenaltyBox = true;
             console.log(this.players[this.currentPlayer].getName()+ " is getting out of the penalty box");
         }
@@ -117,13 +121,13 @@ class Game {
     };
 
     playerIsNotPenalized() {
-        return !this.inPenaltyBox[this.currentPlayer] || this.isGettingOutOfPenaltyBox;
+        return !this.players[this.currentPlayer].isInPenaltyBox() || this.isGettingOutOfPenaltyBox;
     }
 
     addCoins() {
-        this.purses[this.currentPlayer] += 1;
+        this.players[this.currentPlayer].addCoin();
         console.log(this.players[this.currentPlayer].getName()+ " now has " +
-            this.purses[this.currentPlayer] + " Gold Coins.");
+            this.players[this.currentPlayer].getPurse() + " Gold Coins.");
     }
 
     nextPlayer() {
@@ -135,7 +139,7 @@ class Game {
     wrongAnswer = function () {
         console.log('Question was incorrectly answered');
         console.log(this.players[this.currentPlayer].getName()+ " was sent to the penalty box");
-        this.inPenaltyBox[this.currentPlayer] = true;
+        this.players[this.currentPlayer].goToPenaltyBox();
 
         this.nextPlayer();
         return true;

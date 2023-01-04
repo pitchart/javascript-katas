@@ -4,6 +4,7 @@
 // TODO 4: See how the game is finished
 // TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
 
+const Die = require("./die");
 const Category = {
     SCIENCE: 'Science',
     SPORTS: 'Sports',
@@ -86,22 +87,23 @@ class Game {
     };
 
 
-    roll = function (die) {
+    roll = function (dieValue) {
+        const die = new Die(dieValue);
         console.log(this.players[this.currentPlayer].getName()+ " is the current player");
-        console.log("They have rolled a " + die);
+        console.log("They have rolled a " + die.value);
 
-        if (this.players[this.currentPlayer].isInPenaltyBox() && !this.isOdd(die)) {
+        if (this.players[this.currentPlayer].isInPenaltyBox() && !die.isOdd()) {
             console.log(this.players[this.currentPlayer].getName()+ " is not getting out of the penalty box");
             this.isGettingOutOfPenaltyBox = false;
             return;
         }
 
-        if (this.players[this.currentPlayer].isInPenaltyBox() && this.isOdd(die)) {
+        if (this.players[this.currentPlayer].isInPenaltyBox() && die.isOdd()) {
             this.isGettingOutOfPenaltyBox = true;
             console.log(this.players[this.currentPlayer].getName()+ " is getting out of the penalty box");
         }
 
-        this.moveCurrentPlayer(die);
+        this.moveCurrentPlayer(die.value);
         console.log("The category is " + this.currentCategory());
         this.askQuestion();
 

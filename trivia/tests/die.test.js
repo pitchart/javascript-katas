@@ -6,6 +6,14 @@ class Die {
         }
         this.#value = value;
     }
+
+    isOdd() {
+        return this.#value % 2 !== 0;
+    }
+
+    get value() {
+        return this.#value;
+    }
 }
 
 describe("die", () => {
@@ -21,9 +29,19 @@ describe("die", () => {
         expect(roll).toThrow("incorrect value");
     });
 
-    it.each("should be odd when the value is 1, 3, 5", () => {
-       const die = new Die(1);
-       expect(die.isOdd());
+    it.each([1, 3, 5])("should be odd when the value is %i", (value) => {
+        const die = new Die(value);
+        expect(die.isOdd()).toBeTruthy();
+    });
+
+    it.each([2, 4, 6])("should not be odd when the value is %i", (value) => {
+        const die = new Die(value);
+        expect(die.isOdd()).toBeFalsy();
+    });
+
+    it("should get value", () => {
+        const die = new Die(2);
+        expect(die.value).toBe(2);
     });
 
 });

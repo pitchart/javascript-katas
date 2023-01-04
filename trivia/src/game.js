@@ -38,11 +38,9 @@ class Game {
     boardSize = 12;
 
     moveCurrentPlayer(die) {
-
         this.players[this.currentPlayer].moveTo((this.players[this.currentPlayer].getPlace() + die) % this.boardSize);
         console.log(this.players[this.currentPlayer].getName()+ "'s new location is " + this.players[this.currentPlayer].getPlace());
     }
-
 
     isOdd(die) {
         return die % 2 != 0;

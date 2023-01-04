@@ -1,3 +1,4 @@
+const Die = require('./die');
 const Game = require('./game');
 const Player =  require('./player');
 
@@ -8,9 +9,8 @@ class GameRunner {
             let game = new Game(new Player('Chet'), new Player('Pat'), new Player('Sue'));
 
             do {
-
-                const dieValue = Math.floor(Math.random() * 6) + 1;
-                game.roll(dieValue);
+                const die = new Die(Math.floor(Math.random() * 6) + 1)
+                game.roll(die);
 
                 if (Math.floor(Math.random() * 10) == 7) {
                     notAWinner = game.wrongAnswer();

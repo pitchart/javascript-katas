@@ -1,8 +1,6 @@
 // TODO 1: Remove isGettingOutOfPenaltyBox from Game class
-// TODO 2: Create value object Roll (with die and isOdd methods?)
-// TODO 3: Refactor "roll" method in Game class
-// TODO 4: See how the game is finished
 // TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
+// TODO 4: See how the game is finished
 
 const Category = {
     SCIENCE: 'Science',
@@ -28,6 +26,7 @@ class Game {
         players.forEach(player => this.add(player));
         for (let category in Category) {
             let categoryElement = Category[category];
+
             this.questions.set(categoryElement, []);
             for (let i = 0; i < 50; i++) {
                 this.questions.get(categoryElement).push(`${categoryElement} Question ${i}`);

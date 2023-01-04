@@ -7,10 +7,14 @@ class QuestionsDeck {
             this.questions.set(category, []);
         }
 
-        if (this.questions.get(category).includes(label)) {
-            throw new Error("Question already exists");
-        }
-
+        this.questions.forEach(
+            function(questions){
+                if (questions.includes(label)) {
+                    throw new Error("Question already exists");
+                }
+            }
+        )
+        
         this.questions.get(category).push(label);
     }
 

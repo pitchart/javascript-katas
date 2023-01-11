@@ -1,10 +1,7 @@
 // TODO 1: Remove isGettingOutOfPenaltyBox from Game class
-// TODO 2: Create value object Roll (with die and isOdd methods?)
-// TODO 3: Refactor "roll" method in Game class
-// TODO 4: See how the game is finished
 // TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
+// TODO 4: See how the game is finished
 
-const Die = require("./die");
 const Category = {
     SCIENCE: 'Science',
     SPORTS: 'Sports',
@@ -29,6 +26,7 @@ class Game {
         players.forEach(player => this.add(player));
         for (let category in Category) {
             let categoryElement = Category[category];
+
             this.questions.set(categoryElement, []);
             for (let i = 0; i < 50; i++) {
                 this.questions.get(categoryElement).push(`${categoryElement} Question ${i}`);
@@ -39,12 +37,8 @@ class Game {
     boardSize = 12;
 
     moveCurrentPlayer(die) {
-        this.players[this.currentPlayer].moveTo((this.players[this.currentPlayer].getPlace() + die) % this.boardSize);
+        this.players[this.currentPlayer].moveTo((this.players[this.currentPlayer].getPlace() + die.value) % this.boardSize);
         console.log(this.players[this.currentPlayer].getName()+ "'s new location is " + this.players[this.currentPlayer].getPlace());
-    }
-
-    isOdd(die) {
-        return die % 2 != 0;
     }
 
     currentCategory = function () {
@@ -87,8 +81,7 @@ class Game {
     };
 
 
-    roll = function (dieValue) {
-        const die = new Die(dieValue);
+    roll = function (die) {
         console.log(this.players[this.currentPlayer].getName()+ " is the current player");
         console.log("They have rolled a " + die.value);
 
@@ -103,7 +96,7 @@ class Game {
             console.log(this.players[this.currentPlayer].getName()+ " is getting out of the penalty box");
         }
 
-        this.moveCurrentPlayer(die.value);
+        this.moveCurrentPlayer(die);
         console.log("The category is " + this.currentCategory());
         this.askQuestion();
 

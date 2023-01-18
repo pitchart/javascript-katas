@@ -1,29 +1,61 @@
 const Die = require('./die');
 const Game = require('./game');
-const Player =  require('./player');
+const Player = require('./player');
 const QuestionsDeckFactory = require('./questionsDeckFactory');
 const Category = require("./category");
 
 class GameRunner {
-    constructor() {
-        this.play = function () {
-            var notAWinner = false;
-            const deck = QuestionsDeckFactory.create();
+    play() {
+        let notAWinner = false;
+        const deck = QuestionsDeckFactory.create();
 
-            let game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
+        const game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
 
-            do {
-                const die = new Die(Math.floor(Math.random() * 6) + 1)
-                game.roll(die);
+        do {
+            const die = new Die(Math.floor(Math.random() * 6) + 1)
+            game.roll(die);
 
-                if (Math.floor(Math.random() * 10) == 7) {
-                    notAWinner = game.wrongAnswer();
-                } else {
-                    notAWinner = game.wasCorrectlyAnswered();
-                }
+            if (Math.floor(Math.random() * 10) == 7) {
+                notAWinner = game.wrongAnswer();
+            } else {
+                notAWinner = game.correctAnswer();
+            }
 
-            } while (notAWinner);
-        };
+        } while (notAWinner);
+    }
+
+    newPlay() {
+        const deck = QuestionsDeckFactory.create();
+        const game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
+
+        while (!game.didCurrentPlayerWin()) {
+            this.playCurrentPlayerTurn(game);
+            if (!game.didCurrentPlayerWin()) {
+                game.nextPlayer();
+            }
+        }
+    }
+    playCurrentPlayerTurn(game) {
+        // prerequisites : being the current player
+        const die = new Die(Math.floor(Math.random() * 6) + 1)
+
+        game.roll(die);
+
+        // TODO : penalty box use case is missing
+        game.askQuestion()
+        if (this.isCorrectlyAnswered()) {
+            game.correctAnswer();
+            if (game.didCurrentPlayerWin()) {
+                // end of game
+                return;
+            }
+        } else {
+            game.wrongAnswer();
+        }
+    }
+
+    isCorrectlyAnswered() {
+        return Math.floor(Math.random() * 10) == 7;
     }
 }
 

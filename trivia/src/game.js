@@ -1,5 +1,4 @@
 // TODO 1: Remove isGettingOutOfPenaltyBox from Game class
-// TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
 // TODO 4: See how the game is finished
 
 const Category = require("./category");
@@ -48,9 +47,8 @@ class Game {
     };
 
     didPlayerWin = function () {
-        return !(this.players[this.currentPlayer].getPurse() == 6);
+        return this.players[this.currentPlayer].getPurse() !== 6;
     };
-
 
     add = function (player) {
         this.players.push(player);
@@ -71,18 +69,20 @@ class Game {
 
 
     roll = function (die) {
-        console.log(this.players[this.currentPlayer].getName()+ " is the current player");
+        const currentPlayerInstance =this.players[this.currentPlayer];
+        console.log(currentPlayerInstance.getName()+ " is the current player");
         console.log("They have rolled a " + die.value);
 
-        if (this.players[this.currentPlayer].isInPenaltyBox() && !die.isOdd()) {
-            console.log(this.players[this.currentPlayer].getName()+ " is not getting out of the penalty box");
+        // TODO : remove isGettingOutOfPenaltyBox flag assignment and returns its value
+        if (currentPlayerInstance.isInPenaltyBox() && !die.isOdd()) {
+            console.log(currentPlayerInstance.getName()+ " is not getting out of the penalty box");
             this.isGettingOutOfPenaltyBox = false;
             return;
         }
 
-        if (this.players[this.currentPlayer].isInPenaltyBox() && die.isOdd()) {
+        if (currentPlayerInstance.isInPenaltyBox() && die.isOdd()) {
             this.isGettingOutOfPenaltyBox = true;
-            console.log(this.players[this.currentPlayer].getName()+ " is getting out of the penalty box");
+            console.log(currentPlayerInstance.getName()+ " is getting out of the penalty box");
         }
 
         this.moveCurrentPlayer(die);
@@ -91,7 +91,7 @@ class Game {
 
     };
 
-    wasCorrectlyAnswered = function () {
+    correctAnswer = function () {
         let winner = false;
         if (this.playerIsNotPenalized()) {
             console.log('Answer was correct!!!!');
@@ -127,6 +127,9 @@ class Game {
         return true;
     };
 
+    didCurrentPlayerWin() {
+        return false;
+    }
 }
 
 module.exports = Game;

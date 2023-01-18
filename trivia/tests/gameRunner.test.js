@@ -17,4 +17,16 @@ describe("Game runner golden master", () => {
 
         expect(outputs).toMatchSnapshot();
     });
+
+    test("Game runner outputs don't break", () => {
+        let gameRunner = new GameRunner();
+        gameRunner.play();
+        const firstAttemptOutputs = outputs;
+        outputs= "";
+        gameRunner = new GameRunner();
+        gameRunner.newPlay();
+        const secondAttemptOutputs = outputs;
+
+        expect(firstAttemptOutputs).toBe(secondAttemptOutputs);
+    });
 });

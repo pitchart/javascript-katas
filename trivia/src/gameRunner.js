@@ -1,12 +1,16 @@
 const Die = require('./die');
 const Game = require('./game');
 const Player =  require('./player');
+const QuestionsDeckFactory = require('./questionsDeckFactory');
+const Category = require("./category");
 
 class GameRunner {
     constructor() {
         this.play = function () {
             var notAWinner = false;
-            let game = new Game(new Player('Chet'), new Player('Pat'), new Player('Sue'));
+            const deck = QuestionsDeckFactory.create();
+
+            let game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
 
             do {
                 const die = new Die(Math.floor(Math.random() * 6) + 1)

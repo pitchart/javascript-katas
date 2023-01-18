@@ -2,34 +2,25 @@
 // TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
 // TODO 4: See how the game is finished
 
-const QuestionsDeck = require("./questionsDeck");
-const Category = {
-    SCIENCE: 'Science',
-    SPORTS: 'Sports',
-    POP: 'Pop',
-    ROCK: 'Rock'
-}
+const Category = require("./category");
 
 class Game {
     players = new Array();
-    deck = new QuestionsDeck();
+    deck;
 
     currentPlayer = 0;
     isGettingOutOfPenaltyBox = false;
 
 
 
-    constructor(...players) {
+    constructor(deck, ...players) {
         if (!this.isPlayable(players.length)) {
             throw new Error("Not enough players to play");
         }
         players.forEach(player => this.add(player));
-        for (let category in Category) {
-            let categoryElement = Category[category];
-            for (let i = 0; i < 50; i++) {
-                this.deck.addQuestion(categoryElement, `${categoryElement} Question ${i}`);
-            }
-        }
+        
+        this.deck = deck;
+        
     }
 
     boardSize = 12;

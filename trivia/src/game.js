@@ -2,6 +2,7 @@
 // TODO 5: Refactor questions feature (pre-loaded questions for each category when instantiating a new Game)
 // TODO 4: See how the game is finished
 
+const QuestionsDeck = require("./questionsDeck");
 const Category = {
     SCIENCE: 'Science',
     SPORTS: 'Sports',
@@ -11,8 +12,7 @@ const Category = {
 
 class Game {
     players = new Array();
-
-    questions = new Map();
+    deck = new QuestionsDeck();
 
     currentPlayer = 0;
     isGettingOutOfPenaltyBox = false;
@@ -26,10 +26,8 @@ class Game {
         players.forEach(player => this.add(player));
         for (let category in Category) {
             let categoryElement = Category[category];
-
-            this.questions.set(categoryElement, []);
             for (let i = 0; i < 50; i++) {
-                this.questions.get(categoryElement).push(`${categoryElement} Question ${i}`);
+                this.deck.addQuestion(categoryElement, `${categoryElement} Question ${i}`);
             }
         }
     }
@@ -77,7 +75,7 @@ class Game {
     };
 
     askQuestion = function () {
-        console.log(this.questions.get(this.currentCategory()).shift());
+        console.log(this.deck.getNextQuestion(this.currentCategory()));
     };
 
 

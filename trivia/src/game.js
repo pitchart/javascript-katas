@@ -122,7 +122,7 @@ class Game {
 
     assertIsNotInPenaltyBox(){
         if (!this.currentPlayerIsNotInPenaltyBox()){
-            throw new Error("You should go out of the penaltybox first");
+            throw new Error("You should go out of the penalty box first");
         }
     }
 }

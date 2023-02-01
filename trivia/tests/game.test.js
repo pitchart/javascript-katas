@@ -113,23 +113,23 @@ describe("Game", () => {
         expect(game.currentPlayerIsNotInPenaltyBox()).toBeFalsy();
     })
 
-    it ("should not ask question when current player is in the penaltybox", () => {
+    it ("should not ask question when current player is in the penalty box", () => {
         const game = gameWithTwoPlayers();
         game.roll(new Die(1));
         game.askQuestion();
         game.wrongAnswer();
 
-        expect(()=>game.askQuestion()).toThrowError("You should go out of the penaltybox first");
+        expect(()=>game.askQuestion()).toThrowError("You should go out of the penalty box first");
     })
 
-    it ("should not answer to a question when current player is in the penaltybox", () => {
+    it ("should not answer to a question when current player is in the penalty box", () => {
         const game = gameWithTwoPlayers();
         game.roll(new Die(1));
         game.askQuestion();
         game.wrongAnswer();
 
-        expect(()=>game.wrongAnswer()).toThrowError("You should go out of the penaltybox first");
-        expect(()=>game.correctAnswer()).toThrowError("You should go out of the penaltybox first");
+        expect(()=>game.wrongAnswer()).toThrowError("You should go out of the penalty box first");
+        expect(()=>game.correctAnswer()).toThrowError("You should go out of the penalty box first");
     })
     
 });

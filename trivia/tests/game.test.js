@@ -74,13 +74,13 @@ describe("Game", () => {
         expect(outputs).toContain("Player One now has 1 Gold Coins.");
     })
 
-    it ("should not be in penaltybox on game start", () => {
+    it ("should not be in penalty box on game start", () => {
         const game = gameWithTwoPlayers();
         
         expect(game.currentPlayerIsNotInPenaltyBox()).toBeTruthy();
     })
 
-    it ("should be in penaltybox after a wrong answer", () => {
+    it ("should be in penalty box after a wrong answer", () => {
         const game = gameWithTwoPlayers();
         game.roll(new Die(1));
         game.askQuestion();
@@ -91,7 +91,7 @@ describe("Game", () => {
         expect(game.currentPlayerIsNotInPenaltyBox()).toBeFalsy();
     })
 
-    it ("should go out of the penaltybox on odd roll", () => {
+    it ("should go out of the penalty box on odd roll", () => {
         const game = gameWithTwoPlayers();
         game.roll(new Die(1));
         game.askQuestion();
@@ -102,7 +102,7 @@ describe("Game", () => {
         expect(game.currentPlayerIsNotInPenaltyBox()).toBeTruthy();
     })
 
-    it ("should don't go out of the penaltybox on even roll", () => {
+    it ("should don't go out of the penalty box on even roll", () => {
         const game = gameWithTwoPlayers();
         game.roll(new Die(1));
         game.askQuestion();

@@ -1,5 +1,8 @@
 // TODO 4: See how the game is finished
 // TODO 5: Can't answer to a question if no question asked
+// TODO XX: Skip console and manage a buffer
+// TODO: this.players[this.currentPlayer] do better
+// TODO: Test data builder game.test.js  
 
 const Category = require("./category");
 

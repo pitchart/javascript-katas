@@ -25,7 +25,7 @@ describe("Player", () => {
         expect(player.getPurse()).toBe(1);
     });
 
-    it("shoud go to penalty box", () => {
+    it("should go to penalty box", () => {
         const player = new Player('Player One')
         player.goToPenaltyBox();
 

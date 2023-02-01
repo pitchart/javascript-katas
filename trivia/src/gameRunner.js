@@ -30,18 +30,20 @@ class GameRunner {
         game.roll(die);
 
         // TODO : penalty box use case is missing
-        game.askQuestion()
-        if (this.isCorrectlyAnswered()) {
-            game.correctAnswer();
-            if (game.hasAWinner()) {
-                // end of game
-                return;
+        if (game.currentPlayerIsNotInPenaltyBox()){
+            game.askQuestion()
+            if (this.isCorrectlyAnswered()) {
+                game.correctAnswer();
+                if (game.hasAWinner()) {
+                    // end of game
+                    return;
+                }
+            } else {
+                game.wrongAnswer();
             }
-        } else {
-            game.wrongAnswer();
         }
     }
-
+    
     isCorrectlyAnswered() {
        return Math.floor(Math.random() * 10) != 7;
     }

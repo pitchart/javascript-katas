@@ -1,3 +1,6 @@
+// TODO 4: See how the game is finished
+// TODO 5: Can't answer to a question if no question asked
+
 const Category = require("./category");
 
 class Game {
@@ -5,7 +8,6 @@ class Game {
     deck;
 
     currentPlayer = 0;
-    isGettingOutOfPenaltyBox = false;
 
 
 
@@ -45,10 +47,19 @@ class Game {
     }
 
     roll = function (die) {
-        const currentPlayerInstance =this.players[this.currentPlayer];
+        const currentPlayerInstance = this.players[this.currentPlayer];
         console.log(currentPlayerInstance.getName()+ " is the current player");
         console.log("They have rolled a " + die.value);
 
+        if (currentPlayerInstance.isInPenaltyBox() && !die.isOdd()) {
+            console.log(currentPlayerInstance.getName()+ " is not getting out of the penalty box");
+            return;
+        }
+
+        if (currentPlayerInstance.isInPenaltyBox() && die.isOdd()) {
+            console.log(currentPlayerInstance.getName()+ " is getting out of the penalty box");
+            currentPlayerInstance.leavePenaltyBox();
+        }
 
         this.moveCurrentPlayer(die);
         console.log("The category is " + this.currentCategory());
@@ -73,6 +84,7 @@ class Game {
     }
 
     askQuestion = function () {
+        this.assertIsNotInPenaltyBox();
         try {
             console.log(this.deck.getNextQuestion(this.currentCategory()));
         } catch (err) {
@@ -81,10 +93,15 @@ class Game {
     }
 
     wrongAnswer = function () {
-
+        this.assertIsNotInPenaltyBox();
+        console.log('Question was incorrectly answered');
+        console.log(this.players[this.currentPlayer].getName()+ " was sent to the penalty box");
+        this.players[this.currentPlayer].goToPenaltyBox();
     }
 
     correctAnswer = function () {
+        this.assertIsNotInPenaltyBox();
+        console.log('Answer was correct!!!!');
         this.addCoins();
     }
 
@@ -98,6 +115,15 @@ class Game {
         this.currentPlayer += 1;
         if (this.currentPlayer == this.players.length)
             this.currentPlayer = 0;
+    }
+    currentPlayerIsNotInPenaltyBox(){
+        return !this.players[this.currentPlayer].isInPenaltyBox();
+    }
+
+    assertIsNotInPenaltyBox(){
+        if (!this.currentPlayerIsNotInPenaltyBox()){
+            throw new Error("You should go out of the penaltybox first");
+        }
     }
 }
 

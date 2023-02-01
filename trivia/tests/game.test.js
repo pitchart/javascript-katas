@@ -60,7 +60,76 @@ describe("Game", () => {
     })
 
     it("should stop the game if there is no more questions", () => {
-        const game = new Game(new QuestionsDeck(), new Player("Player one"), new Player("Player two"));
+        const game = new Game(new QuestionsDeck(), new Player("Player One"), new Player("Player Two"));
         expect(() => game.askQuestion()).toThrowError("You can't play anymore, sorry");
     })
+
+    it("should gain one gold coin when the player answers correctly", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.correctAnswer();
+
+        expect(outputs).toContain("Answer was correct!!!!");
+        expect(outputs).toContain("Player One now has 1 Gold Coins.");
+    })
+
+    it ("should not be in penaltybox on game start", () => {
+        const game = gameWithTwoPlayers();
+        
+        expect(game.currentPlayerIsNotInPenaltyBox()).toBeTruthy();
+    })
+
+    it ("should be in penaltybox after a wrong answer", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.wrongAnswer();
+        
+        expect(outputs).toContain("Question was incorrectly answered");
+        expect(outputs).toContain("Player One was sent to the penalty box");
+        expect(game.currentPlayerIsNotInPenaltyBox()).toBeFalsy();
+    })
+
+    it ("should go out of the penaltybox on odd roll", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.wrongAnswer();
+        game.roll(new Die(1));
+
+        expect(outputs).toContain("Player One is getting out of the penalty box");
+        expect(game.currentPlayerIsNotInPenaltyBox()).toBeTruthy();
+    })
+
+    it ("should don't go out of the penaltybox on even roll", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.wrongAnswer();
+        game.roll(new Die(2));
+
+        expect(outputs).toContain("Player One is not getting out of the penalty box");
+        expect(game.currentPlayerIsNotInPenaltyBox()).toBeFalsy();
+    })
+
+    it ("should not ask question when current player is in the penaltybox", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.wrongAnswer();
+
+        expect(()=>game.askQuestion()).toThrowError("You should go out of the penaltybox first");
+    })
+
+    it ("should not answer to a question when current player is in the penaltybox", () => {
+        const game = gameWithTwoPlayers();
+        game.roll(new Die(1));
+        game.askQuestion();
+        game.wrongAnswer();
+
+        expect(()=>game.wrongAnswer()).toThrowError("You should go out of the penaltybox first");
+        expect(()=>game.correctAnswer()).toThrowError("You should go out of the penaltybox first");
+    })
+    
 });

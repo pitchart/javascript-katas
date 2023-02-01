@@ -52,7 +52,6 @@ class Game {
 
         this.moveCurrentPlayer(die);
         console.log("The category is " + this.currentCategory());
-        this.askQuestion();
     }
 
     currentCategory = function () {
@@ -74,7 +73,11 @@ class Game {
     }
 
     askQuestion = function () {
-
+        try {
+            console.log(this.deck.getNextQuestion(this.currentCategory()));
+        } catch (err) {
+            throw "You can't play anymore, sorry";
+        }
     }
 
     wrongAnswer = function () {

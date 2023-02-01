@@ -16,4 +16,22 @@ describe("Game", () => {
         expect(startGame).not.toThrowError("Not enough players to play");
     });
 
+    it("should not have a winner on game started", () => {
+        const game =  new Game(QuestionsDeckFactory.create(), new Player("Player One"), new Player("Player Two"));
+
+        expect(game.hasAWinner()).toBeFalsy();
+    })
+
+    it("should ...", () => {
+        const game = new Game(QuestionsDeckFactory.create(), new Player("Player One"), new Player("Player Two"));
+        game.correctAnswer();
+        game.correctAnswer();
+        game.correctAnswer();
+        game.correctAnswer();
+        game.correctAnswer();
+        game.correctAnswer();
+        game.nextPlayer();
+        expect(game.hasAWinner()).toBeTruthy();
+    });
+
 });

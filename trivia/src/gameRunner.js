@@ -5,36 +5,24 @@ const QuestionsDeckFactory = require('./questionsDeckFactory');
 const Category = require("./category");
 
 class GameRunner {
+
+
     play() {
-        let notAWinner = false;
-        const deck = QuestionsDeckFactory.create();
-
-        const game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
-
-        do {
-            const die = new Die(Math.floor(Math.random() * 6) + 1)
-            game.roll(die);
-
-            if (Math.floor(Math.random() * 10) == 7) {
-                notAWinner = game.wrongAnswer();
-            } else {
-                notAWinner = game.correctAnswer();
-            }
-
-        } while (notAWinner);
-    }
-
-    newPlay() {
         const deck = QuestionsDeckFactory.create();
         const game = new Game(deck, new Player('Chet'), new Player('Pat'), new Player('Sue'));
 
-        while (!game.didCurrentPlayerWin()) {
+        while (!game.hasAWinner()) {
             this.playCurrentPlayerTurn(game);
-            if (!game.didCurrentPlayerWin()) {
+            if (!game.hasAWinner()) {
                 game.nextPlayer();
             }
         }
     }
+
+    /**
+     *
+     * @param {Game} game
+     */
     playCurrentPlayerTurn(game) {
         // prerequisites : being the current player
         const die = new Die(Math.floor(Math.random() * 6) + 1)
@@ -45,7 +33,7 @@ class GameRunner {
         game.askQuestion()
         if (this.isCorrectlyAnswered()) {
             game.correctAnswer();
-            if (game.didCurrentPlayerWin()) {
+            if (game.hasAWinner()) {
                 // end of game
                 return;
             }
@@ -55,7 +43,7 @@ class GameRunner {
     }
 
     isCorrectlyAnswered() {
-        return Math.floor(Math.random() * 10) == 7;
+       return Math.floor(Math.random() * 10) != 7;
     }
 }
 
